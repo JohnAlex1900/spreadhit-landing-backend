@@ -1,10 +1,11 @@
 from flask import jsonify, request
 from flask_mail import Mail, Message
 import os
-
 from flask import Flask
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Configure Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.zoho.com'
@@ -15,7 +16,6 @@ app.config['MAIL_PASSWORD'] = os.getenv('ZOHO_MAIL_PASSWORD')  # Store password 
 app.config['MAIL_DEFAULT_SENDER'] = 'info@spreadhit.com'
 
 mail = Mail(app)
-
 
 @app.route('/send_confirmation_email', methods=['POST'])
 def send_confirmation_email():
@@ -33,5 +33,10 @@ def send_confirmation_email():
         mail.send(msg)
         return jsonify({"message": "Email sent successfully"}), 200
     except Exception as e:
-        print(f"Failed to send email: {e}")
-        return jsonify({"message": "Error sending email"}), 500
+        print(f"Failed to send email: {e}")  # Log the actual error in the backend
+        return jsonify({"message": "Error sending email", "error": str(e)}), 500
+
+
+# Ensure the Flask app runs
+if __name__ == "__main__":
+    app.run(debug=True)
