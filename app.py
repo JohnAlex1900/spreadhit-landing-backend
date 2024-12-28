@@ -22,6 +22,8 @@ mail = Mail(app)
 @app.route('/send_confirmation_email', methods=['POST'])
 def send_confirmation_email():
     data = request.get_json()
+    if not data or 'name' not in data or 'email' not in data:
+        return jsonify({"message": "Invalid input, 'name' and 'email' are required"}), 400
     name = data['name']
     email = data['email']
 
