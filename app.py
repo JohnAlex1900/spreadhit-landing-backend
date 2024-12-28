@@ -5,7 +5,9 @@ from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+
+# Explicitly allow only your frontend origin
+CORS(app, resources={r"/*": {"origins": ["https://www.spreadhit.com"]}})
 
 # Configure Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.zoho.com'
